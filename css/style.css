@@ -1,0 +1,17 @@
+h1 {
+  color:red
+}
+
+h2{
+  color: #0ff;
+  color: #f00;
+  color: #0f0;
+  color: #ff0;
+  color: #f0f;
+  color: #00f;
+  color: #f50;
+}
+
+canvas {
+  border: 1px solid red;
+}
