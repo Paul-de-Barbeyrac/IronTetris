@@ -113,3 +113,29 @@ function update(time=0){
 
 
 update()
+
+function moveDown() {
+  player.positionStart.y+=1;
+}
+
+function moveLeft() {
+  player.positionStart.x-=1;
+}
+
+function moveRight() {
+  player.positionStart.x+=1;
+}
+
+document.onkeydown = function(e) {
+switch (e.keyCode) {
+  case 40:
+    moveDown();
+    break;
+  case 37:
+    moveLeft();
+    break;
+  case 39:
+    moveRight();
+    break;
+}
+}
