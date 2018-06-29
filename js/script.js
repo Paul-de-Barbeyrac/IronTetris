@@ -2,8 +2,7 @@
 var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
-ctx.fillStyle='#66ccff';
-ctx.fillRect(0,0,canvas.width,canvas.height);
+
 ctx.scale(5,5);
 
 var tetrominoColors = [ '#0ff', '#f00', '#0f0', '#ff0', '#f0f', '#00f', '#f50' ];
@@ -52,16 +51,28 @@ var S = [
 
 var tetrominoShapes = [I,O,T,L,J,Z,S];
 
-function draw (x,y,tetromino){
+function draw () {
+  ctx.fillStyle='#66ccff';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+  drawTetromino(player.tetromino,player.positionStart);
+}
+
+
+function drawTetromino (tetromino,offset){
 	for (var i=0;i<3;i++){
 		for (var j=0;j<3;j++){
 			// debugger;
 			if (tetromino[j][i]==1){
 				ctx.fillStyle='red';
-				ctx.fillRect(i+x,j+y,1,1);
+				ctx.fillRect(i+offset.x,j+offset.y,1,1);
 			}
 		}
 	}	
+}
+
+const player={
+  positionStart:{x:20,y:5},
+  tetromino: tetrominoShapes[2],
 }
 
 var A=[[1,1,1],[1,0,0],[0,0,0]];
@@ -69,16 +80,36 @@ var A=[[1,1,1],[1,0,0],[0,0,0]];
 function rotation (dir,matrix){
 
  if (dir==1){
-  var temp=math.transpose(matrix);
-  var matrixRotated=temp.map(function(e){
+  var matrixRotated=math.transpose(matrix).map(function(e){
     return e.reverse();
   })}
   
   else if (dir==-1){
-    var temp=matrix.map(function(e){
-      return e.reverse()})
-    var matrixRotated=math.transpose(temp);
+    var matrixRotated=math.transpose(matrix.map(function(e){
+      return e.reverse()}));
   }
 
-return matrixRotated
+  return matrixRotated
 }
+
+var dropCounter=0;
+var dropInterval=1000;
+
+
+var lastTime=0;
+
+function update(time=0){
+  // debugger;
+  var deltaTime=time-lastTime;
+  lastTime=time;
+  dropCounter+=deltaTime;
+  if (dropCounter>dropInterval){
+    player.positionStart.y++;
+    dropCounter=0;
+  }
+  draw();
+  requestAnimationFrame(update);
+}
+
+
+update()
