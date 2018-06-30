@@ -1,7 +1,4 @@
-h1 {
-  color:red
-}
-
+/* 
 h2{
   color: #0ff;
   color: #f00;
@@ -10,8 +7,24 @@ h2{
   color: #f0f;
   color: #00f;
   color: #f50;
+} */
+
+/* html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+} */
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  }
+
+
+#Tetris{
+  height:400px;
 }
 
-canvas {
-  border: 1px solid red;
-}
+

@@ -2,6 +2,10 @@
 var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
+//responsiveness
+var aspectRatio = 2;
+canvas.width = canvas.height /aspectRatio;
+
 
 ctx.scale(5,5);
 
@@ -71,7 +75,7 @@ function drawTetromino (tetromino,offset){
 }
 
 const player={
-  positionStart:{x:20,y:5},
+  positionStart:{x:4,y:0},
   tetromino: tetrominoShapes[2],
 }
 
@@ -115,15 +119,15 @@ function update(time=0){
 update()
 
 function moveDown() {
-  player.positionStart.y+=1;
+  player.positionStart.y++;
 }
 
 function moveLeft() {
-  player.positionStart.x-=1;
+  player.positionStart.x--;
 }
 
 function moveRight() {
-  player.positionStart.x+=1;
+  player.positionStart.x++;
 }
 
 document.onkeydown = function(e) {
