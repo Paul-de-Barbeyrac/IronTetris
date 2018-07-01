@@ -2,7 +2,7 @@ var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
 //to keep the tetromino declaration to 1px each block and scale later on
-ctx.scale(20,20);
+ctx.scale(20, 20);
 
 function createMatrix(w, h) {
   const matrix = []
@@ -12,17 +12,17 @@ function createMatrix(w, h) {
   return matrix;
 }
 
-var backgroundGrid = createMatrix(12,20); //because scale of 20 and width and height set to 240 and 400px
+var backgroundGrid = createMatrix(12, 20); //because scale of 20 and width and height set to 240 and 400px
 
 
 function superpose(backgroundGrid, player) {
   // debugger;
   player.tetromino.forEach((row, y) => {
-      row.forEach((value, x) => {
-          if (value !== 0) {
-              backgroundGrid[y + player.position.y][x + player.position.x] = value;
-          }
-      });
+    row.forEach((value, x) => {
+      if (value !== 0) {
+        backgroundGrid[y + player.position.y][x + player.position.x] = value;
+      }
+    });
   });
 }
 
@@ -31,13 +31,13 @@ function collision(backgroundGrid, player) {
   const m = player.tetromino;
   const o = player.position;
   for (let y = 0; y < m.length; ++y) {
-      for (let x = 0; x < m[y].length; ++x) {
-          if (m[y][x] !== 0 &&
-             (backgroundGrid[y + o.y] &&
-              backgroundGrid[y + o.y][x + o.x]) !== 0) {
-              return true;
-          }
+    for (let x = 0; x < m[y].length; ++x) {
+      if (m[y][x] !== 0 &&
+        (backgroundGrid[y + o.y] &&
+          backgroundGrid[y + o.y][x + o.x]) !== 0) {
+        return true;
       }
+    }
   }
   return false;
 }
@@ -45,7 +45,7 @@ function collision(backgroundGrid, player) {
 function playerMove(offset) {
   player.position.x += offset;
   if (collision(backgroundGrid, player)) {
-      player.position.x -= offset;
+    player.position.x -= offset;
   }
 }
 
@@ -103,7 +103,10 @@ var tetrominoShapes = [I, O, T, L, J, Z, S];
 function draw() {
   ctx.fillStyle = '#66ccff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawTetromino(backgroundGrid,{x:0,y:0});
+  drawTetromino(backgroundGrid, {
+    x: 0,
+    y: 0
+  });
   drawTetromino(player.tetromino, player.position);
 
 }
@@ -111,14 +114,14 @@ function draw() {
 
 function drawTetromino(matrix, offset) {
   matrix.forEach((row, y) => {
-      row.forEach((value, x) => {
-          if (value !== 0) {
-              ctx.fillStyle = 'red';
-              ctx.fillRect(x + offset.x,
-                               y + offset.y,
-                               1, 1);
-          }
-      });
+    row.forEach((value, x) => {
+      if (value !== 0) {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(x + offset.x,
+          y + offset.y,
+          1, 1);
+      }
+    });
   });
 }
 
@@ -143,12 +146,12 @@ function rotation(dir, matrix) {
   return matrixRotated
 }
 
-function playerDrop (){
+function playerDrop() {
   player.position.y++;
-  if (collision(backgroundGrid,player)){
+  if (collision(backgroundGrid, player)) {
     player.position.y--;
-    superpose(backgroundGrid,player);
-    player.position.y=0;
+    superpose(backgroundGrid, player);
+    player.position.y = 0;
   }
 }
 
@@ -161,7 +164,7 @@ let lastTime = 0;
 function update(time = 0) {
   // debugger;
   var deltaTime = time - lastTime;
-  
+
   dropCounter += deltaTime;
   if (dropCounter > dropInterval) {
     playerDrop();
@@ -186,31 +189,39 @@ function smashDown() {
 }
 
 
+
+
+
+
+
 document.onkeydown = function (e) {
   if (event.keyCode === 37) {
-      playerMove(-1);
+    playerMove(-1);
   } else if (event.keyCode === 39) {
-      playerMove(1);
+    playerMove(1);
   } else if (event.keyCode === 40) {
-      playerDrop();
-  } 
-  
-  else if (event.keyCode === 65) {
-    debugger;
+    playerDrop();
+  } else if (event.keyCode === 65) {
     player.tetromino = rotation(-1, player.tetromino)
-    if (collision(backgroundGrid,player)){
-      player.tetromino = rotation(1, player.tetromino)}
-      player.position++;
-      player.tetromino = rotation(-1, player.tetromino);
-      if (collision(backgroundGrid,player)){
-        player.tetromino = rotation(1, player.tetromino)}
+
+    if (player.position.x < 5) {
+
+      if (collision(backgroundGrid, player)) {
+        player.tetromino = rotation(1, player.tetromino)
+        player.position.x++;
+        player.tetromino = rotation(-1, player.tetromino);
       }
-  
-  
-  
-  else if (event.keyCode === 90) {
-    player.tetromino = rotation(1, player.tetromino)
-    if (collision(backgroundGrid,player)){
-      player.tetromino = rotation(-1, player.tetromino)}
+    } 
   }
+
+
+
+
+
+  // else if (event.keyCode === 90) {
+  //   player.tetromino = rotation(1, player.tetromino)
+  //   if (collision(backgroundGrid,player)){
+  //     player.tetromino = rotation(-1, player.tetromino)}
+  //     player.position.x++;
+  // }
 }
