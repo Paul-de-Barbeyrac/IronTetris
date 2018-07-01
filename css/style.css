@@ -9,12 +9,7 @@ h2{
   color: #f50;
 } */
 
-/* html {
-  height: 100%;
-}
-body {
-  min-height: 100%;
-} */
+
 
 .layout {
   display: flex;
@@ -23,3 +18,7 @@ body {
   }
 
 
+  canvas {
+    height:90vh;
+    border: solid 0.3em black;
+  }

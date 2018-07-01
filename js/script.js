@@ -1,8 +1,17 @@
 var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
-//to keep the tetromino declaration to 1px each block and scale later on
-ctx.scale(20, 20);
+//Handling visual aspect of the Tetris based on dimensions of the grid (html) and tetromino size (user choice js)
+var width = canvas.width; 
+var height = canvas.height; 
+var ratio=height/width;
+var scaleFactor=20;
+ctx.scale(scaleFactor,scaleFactor);
+var numberColumns=width/scaleFactor;
+var backgroundGrid = createMatrix(numberColumns,numberColumns*ratio); 
+
+
+
 
 function createMatrix(w, h) {
   const matrix = []
@@ -12,7 +21,7 @@ function createMatrix(w, h) {
   return matrix;
 }
 
-var backgroundGrid = createMatrix(12, 20); //because scale of 20 and width and height set to 240 and 400px
+
 
 
 function superpose(backgroundGrid, player) {
