@@ -57,9 +57,9 @@ function playerMove(offset) {
 var tetrominoColors = ['#0ff', '#f00', '#0f0', '#ff0', '#f0f', '#00f', '#f50'];
 
 var I = [
-  [1, 1, 1],
-  [0, 0, 0],
-  [0, 0, 0],
+  [1, 1, 1,1],
+  [0, 0, 0,0],
+  [0, 0, 0,0],
 ];
 
 var O = [
@@ -201,27 +201,35 @@ document.onkeydown = function (e) {
     playerMove(1);
   } else if (event.keyCode === 40) {
     playerDrop();
-  } else if (event.keyCode === 65) {
-    player.tetromino = rotation(-1, player.tetromino)
-
+  } 
+  
+  
+  else if (event.keyCode === 65) {
     if (player.position.x < 5) {
-
-      if (collision(backgroundGrid, player)) {
-        player.tetromino = rotation(1, player.tetromino)
+      player.tetromino = rotation(-1, player.tetromino)
+      while (collision(backgroundGrid, player)) {
         player.position.x++;
-        player.tetromino = rotation(-1, player.tetromino);
       }
-    } 
+    } else {
+      player.tetromino = rotation(-1, player.tetromino)
+      while (collision(backgroundGrid, player)) {
+        player.position.x--;
+      } 
+    }
   }
 
+  else if (event.keyCode === 90) {
+    if (player.position.x < 5) {
+      player.tetromino = rotation(1, player.tetromino)
+      while (collision(backgroundGrid, player)) {
+        player.position.x++;
+      }
+    } else {
+      player.tetromino = rotation(1, player.tetromino)
+      while (collision(backgroundGrid, player)) {
+        player.position.x--;
+      } 
+    }
+  }
 
-
-
-
-  // else if (event.keyCode === 90) {
-  //   player.tetromino = rotation(1, player.tetromino)
-  //   if (collision(backgroundGrid,player)){
-  //     player.tetromino = rotation(-1, player.tetromino)}
-  //     player.position.x++;
-  // }
 }
