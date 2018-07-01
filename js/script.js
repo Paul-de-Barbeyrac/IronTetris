@@ -1,3 +1,4 @@
+//Rendering canvas
 var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
@@ -36,7 +37,6 @@ function superpose(backgroundGrid, player) {
 }
 
 function collision(backgroundGrid, player) {
-  // debugger;
   const m = player.tetromino;
   const o = player.position;
   for (let y = 0; y < m.length; ++y) {
@@ -114,18 +114,33 @@ function draw() {
   drawTetromino(backgroundGrid, {
     x: 0,
     y: 0
-  });
-  // debugger;
-  drawTetromino(player.tetromino, player.position);
+  },1);
+  drawTetromino(player.tetromino,{x: player.position.x,y:ghost(backgroundGrid,player)},0.4);
+  drawTetromino(player.tetromino, player.position,1);
+}
 
+//Ghost function
+
+function ghost(backgroundGrid,player){
+  // debugger;
+  let temp=player.position.y;
+  let count=player.position.y;
+  while (collision(backgroundGrid, player) === false) {
+    player.position.y++
+    count++;
+  }
+  player.position.y=temp;
+  return count -1
 }
 
 
-function drawTetromino(matrix, offset) {
+
+
+function drawTetromino(matrix, offset,opacity) {
   matrix.forEach((row, y) => {
-    row.forEach((value, x) => {
+    row.forEach((value, x) => {  
       if (value !== 0) {
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = "rgba(255, 0, 0, " + opacity + ")";
         ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
         ctx.beginPath();
         ctx.strokeStyle = "black";
@@ -197,6 +212,12 @@ update()
 
 
 
+// function sleep(miliseconds) {
+//   var currentTime = new Date().getTime();
+//   while (currentTime + miliseconds >= new Date().getTime()) {
+//   }
+// }
+
 
 
 
@@ -214,6 +235,7 @@ document.onkeydown = function (e) {
     }
     player.position.y--;
     superpose(backgroundGrid, player);
+    // sleep(1000)
 
   } else if (event.keyCode === 65) {
     if (player.position.x < 5) {
