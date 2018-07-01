@@ -57,15 +57,14 @@ function playerMove(offset) {
 var tetrominoColors = ['#0ff', '#f00', '#0f0', '#ff0', '#f0f', '#00f', '#f50'];
 
 var I = [
-  [1, 1, 1,1],
-  [0, 0, 0,0],
-  [0, 0, 0,0],
+  [1, 1, 1, 1],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
 ];
 
 var O = [
-  [1, 1, 0],
-  [1, 1, 0],
-  [0, 0, 0],
+  [1, 1],
+  [1, 1],
 ];
 
 var T = [
@@ -107,6 +106,7 @@ function draw() {
     x: 0,
     y: 0
   });
+  // debugger;
   drawTetromino(player.tetromino, player.position);
 
 }
@@ -117,9 +117,12 @@ function drawTetromino(matrix, offset) {
     row.forEach((value, x) => {
       if (value !== 0) {
         ctx.fillStyle = 'red';
-        ctx.fillRect(x + offset.x,
-          y + offset.y,
-          1, 1);
+        ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = "0.1";
+        ctx.rect(x + offset.x, y + offset.y, 1, 1);
+        ctx.stroke();
       }
     });
   });
@@ -180,13 +183,8 @@ function update(time = 0) {
 
 update()
 
-function moveDown() {
-  player.position.y++;
-}
 
-function smashDown() {
-  player.position.y = player.position.y * 2;
-}
+
 
 
 
@@ -201,24 +199,26 @@ document.onkeydown = function (e) {
     playerMove(1);
   } else if (event.keyCode === 40) {
     playerDrop();
-  } 
-  
-  
-  else if (event.keyCode === 65) {
-    if (player.position.x < 5) {
-      player.tetromino = rotation(-1, player.tetromino)
-      while (collision(backgroundGrid, player)) {
-        player.position.x++;
-      }
-    } else {
-      player.tetromino = rotation(-1, player.tetromino)
-      while (collision(backgroundGrid, player)) {
-        player.position.x--;
-      } 
+  } else if (event.keyCode === 32) {
+    while (collision(backgroundGrid, player) === false) {
+      player.position.y++;
     }
-  }
+    player.position.y--;
+    superpose(backgroundGrid, player);
 
-  else if (event.keyCode === 90) {
+  } else if (event.keyCode === 65) {
+    if (player.position.x < 5) {
+      player.tetromino = rotation(-1, player.tetromino)
+      while (collision(backgroundGrid, player)) {
+        player.position.x++;
+      }
+    } else {
+      player.tetromino = rotation(-1, player.tetromino)
+      while (collision(backgroundGrid, player)) {
+        player.position.x--;
+      }
+    }
+  } else if (event.keyCode === 90) {
     if (player.position.x < 5) {
       player.tetromino = rotation(1, player.tetromino)
       while (collision(backgroundGrid, player)) {
@@ -228,7 +228,7 @@ document.onkeydown = function (e) {
       player.tetromino = rotation(1, player.tetromino)
       while (collision(backgroundGrid, player)) {
         player.position.x--;
-      } 
+      }
     }
   }
 
