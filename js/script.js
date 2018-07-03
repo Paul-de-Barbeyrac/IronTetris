@@ -11,9 +11,7 @@ ctx.scale(scaleFactor,scaleFactor);
 var numberColumns=width/scaleFactor;
 var backgroundGrid = createMatrix(numberColumns,numberColumns*ratio); 
 
-
-
-
+//Function used to define the grid game
 function createMatrix(w, h) {
   const matrix = []
   while (h--) {
@@ -22,11 +20,8 @@ function createMatrix(w, h) {
   return matrix;
 }
 
-
-
-
+//Write the position of the player on the grid
 function superpose(backgroundGrid, player) {
-  // debugger;
   player.tetromino.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
@@ -36,6 +31,7 @@ function superpose(backgroundGrid, player) {
   });
 }
 
+//To check if the tetromino meets a border or an existing piece
 function collision(backgroundGrid, player) {
   const m = player.tetromino;
   const o = player.position;
@@ -58,55 +54,24 @@ function playerMove(offset) {
   }
 }
 
+//Define a Class Tetromino and instantiate parts
+function Tetromino(name,shape,color){
+  this.name = name;
+  this.shape = shape;
+  this.color = color;
+}
+
+var tetroI = new Tetromino("I",[[1, 1, 1, 1],[0, 0, 0, 0],[0, 0, 0, 0]],"rgb(0,0,255)");
+var tetroO = new Tetromino("0",[[1, 1],[1, 1]],"rgb(251,255,0)");
+var tetroT = new Tetromino("T",[[1, 1, 1],[0, 1, 0],[0, 0, 0]],"rgb(190,0,255)");
+var tetroL = new Tetromino("L",[[1, 1, 1],[1, 0, 0],[0, 0, 0]],"rgb(254,164,0)");
+var tetroJ = new Tetromino("J",[[1, 1, 1],[0, 0, 1],[0, 0, 0]],"rgb(55,0,255)");
+var tetroZ = new Tetromino("Z",[[1, 1, 0],[0, 1, 1],[0, 0, 0]],"rgb(255,0,0)");
+var tetroS = new Tetromino("S",[[0, 1, 1],[1, 1, 0],[0, 0, 0]],"rgb(0,255,0)");
+
+var list=[tetroI.shape,tetroO.shape,tetroT.shape,tetroL.shape,tetroJ.shape,tetroZ.shape,tetroS.shape]
 
 
-// console.table(backgroundGrid);
-
-
-var tetrominoColors = ['#0ff', '#f00', '#0f0', '#ff0', '#f0f', '#00f', '#f50'];
-
-var I = [
-  [1, 1, 1, 1],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
-
-var O = [
-  [1, 1],
-  [1, 1],
-];
-
-var T = [
-  [1, 1, 1],
-  [0, 1, 0],
-  [0, 0, 0],
-];
-
-var L = [
-  [1, 1, 1],
-  [1, 0, 0],
-  [0, 0, 0],
-];
-
-var J = [
-  [1, 1, 1],
-  [0, 0, 1],
-  [0, 0, 0],
-];
-
-var Z = [
-  [1, 1, 0],
-  [0, 1, 1],
-  [0, 0, 0],
-];
-
-var S = [
-  [0, 1, 1],
-  [1, 1, 0],
-  [0, 0, 0],
-];
-
-var tetrominoShapes = [I, O, T, L, J, Z, S];
 
 function draw() {
   ctx.fillStyle = '#66ccff';
@@ -119,8 +84,7 @@ function draw() {
   drawTetromino(player.tetromino, player.position,1);
 }
 
-//Ghost function
-
+//Ghost function to find out at which y position to display the transparent tetromino
 function ghost(backgroundGrid,player){
   // debugger;
   let temp=player.position.y;
@@ -132,9 +96,6 @@ function ghost(backgroundGrid,player){
   player.position.y=temp;
   return count -1
 }
-
-
-
 
 function drawTetromino(matrix, offset,opacity) {
   matrix.forEach((row, y) => {
@@ -157,8 +118,10 @@ var player = {
     x: 1,
     y: 0
   },
-  tetromino: tetrominoShapes[Math.floor(Math.random() * tetrominoShapes.length)]
+  tetromino: list[Math.floor(Math.random() * list.length)]
 }
+
+// tetrominoShapes[Math.floor(Math.random() * tetrominoShapes.length)
 
 function rotation(dir, matrix) {
   if (dir == 1) {
@@ -185,42 +148,20 @@ function playerDrop() {
 let dropCounter = 0;
 let dropInterval = 1000;
 
-
 let lastTime = 0;
 
-function update(time = 0) {
-  // debugger;
-  var deltaTime = time - lastTime;
-
-  dropCounter += deltaTime;
-  if (dropCounter > dropInterval) {
-    playerDrop();
-    dropCounter = 0;
-    // console.log(player.position.x)
-  }
-  lastTime = time;
+function update() {
   draw();
-  requestAnimationFrame(update);
-
+setInterval(function(){
+  playerDrop();
+  draw();
+},1000);
 }
-
 
 update()
 
 
-
-
-
-
-// function sleep(miliseconds) {
-//   var currentTime = new Date().getTime();
-//   while (currentTime + miliseconds >= new Date().getTime()) {
-//   }
-// }
-
-
-
-
+//Keyboard user input to move left/right, rotate, smashdown
 
 document.onkeydown = function (e) {
   if (event.keyCode === 37) {
@@ -235,7 +176,7 @@ document.onkeydown = function (e) {
     }
     player.position.y--;
     superpose(backgroundGrid, player);
-    // sleep(1000)
+    playerDrop();
 
   } else if (event.keyCode === 65) {
     if (player.position.x < 5) {
@@ -262,5 +203,5 @@ document.onkeydown = function (e) {
       }
     }
   }
-
+  draw();
 }
