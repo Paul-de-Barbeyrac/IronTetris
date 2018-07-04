@@ -3,13 +3,13 @@ var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
 //Handling visual aspect of the Tetris based on dimensions of the grid (html) and tetromino size (user choice js)
-var width = canvas.width; 
-var height = canvas.height; 
-var ratio=height/width;
-var scaleFactor=20;
-ctx.scale(scaleFactor,scaleFactor);
-var numberColumns=width/scaleFactor;
-var backgroundGrid = createMatrix(numberColumns,numberColumns*ratio); 
+var width = canvas.width;
+var height = canvas.height;
+var ratio = height / width;
+var scaleFactor = 20;
+ctx.scale(scaleFactor, scaleFactor);
+var numberColumns = width / scaleFactor;
+var backgroundGrid = createMatrix(numberColumns, numberColumns * ratio);
 
 //Function used to define the grid game
 function createMatrix(w, h) {
@@ -47,6 +47,7 @@ function collision(backgroundGrid, player) {
   return false;
 }
 
+//Moving left or right
 function playerMove(offset) {
   player.position.x += offset;
   if (collision(backgroundGrid, player)) {
@@ -54,23 +55,83 @@ function playerMove(offset) {
   }
 }
 
-//Define a Class Tetromino and instantiate parts
-function Tetromino(name,shape,color){
-  this.name = name;
-  this.shape = shape;
-  this.color = color;
+function createPiece(type) {
+  if (type === 'I') {
+    return [
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+    ];
+  } else if (type === 'O') {
+    return [
+      [2, 2],
+      [2, 2],
+    ];}
+    else if (type === 'T') {
+      return [
+        [0, 3, 0],
+        [3, 3, 3],
+        [0, 0, 0],
+      ];
+    
+  } else if (type === 'L') {
+    return [
+      [0, 4, 0],
+      [0, 4, 0],
+      [0, 4, 4],
+    ];
+  } else if (type === 'J') {
+    return [
+      [0, 5, 0],
+      [0, 5, 0],
+      [5, 5, 0],
+    ];
+
+  } else if (type === 'Z') {
+    return [
+      [6, 6, 0],
+      [0, 6, 6],
+      [0, 0, 0],
+    ];
+  } else if (type === 'S') {
+    return [
+      [0, 7, 7],
+      [7, 7, 0],
+      [0, 0, 0],
+    ];
+  }
 }
 
-var tetroI = new Tetromino("I",[[1, 1, 1, 1],[0, 0, 0, 0],[0, 0, 0, 0]],"rgb(0,0,255)");
-var tetroO = new Tetromino("0",[[1, 1],[1, 1]],"rgb(251,255,0)");
-var tetroT = new Tetromino("T",[[1, 1, 1],[0, 1, 0],[0, 0, 0]],"rgb(190,0,255)");
-var tetroL = new Tetromino("L",[[1, 1, 1],[1, 0, 0],[0, 0, 0]],"rgb(254,164,0)");
-var tetroJ = new Tetromino("J",[[1, 1, 1],[0, 0, 1],[0, 0, 0]],"rgb(55,0,255)");
-var tetroZ = new Tetromino("Z",[[1, 1, 0],[0, 1, 1],[0, 0, 0]],"rgb(255,0,0)");
-var tetroS = new Tetromino("S",[[0, 1, 1],[1, 1, 0],[0, 0, 0]],"rgb(0,255,0)");
+const colors = [
+  null,
+  'rgb(0,255,255)',
+  'rgb(251,255,0)',
+  'rgb(190,0,255)',
+  'rgb(255,164,0)',
+  'rgb(55,0,255)',
+  'rgb(255,0,0)',
+  'rgb(0,255,0)',
+];
 
-var list=[tetroI.shape,tetroO.shape,tetroT.shape,tetroL.shape,tetroJ.shape,tetroZ.shape,tetroS.shape]
+const colorsGhost = [
+  null,
+  'rgb(0,255,255,0.35)',
+  'rgb(251,255,0,0.35)',
+  'rgb(190,0,255,0.35)',
+  'rgb(255,164,0,0.35)',
+  'rgb(55,0,255,0.35)',
+  'rgb(255,0,0,0.35)',
+  'rgb(0,255,0,0.35)',
+];
 
+const borderColor = 'rgb(0,0,0)'
+const borderColorGhost = 'rgb(0,0,0,0.35)'
+
+function playerReset() {
+  const pieces = 'IOTLJZS';
+  player.tetromino = createPiece(pieces[math.floor(pieces.length * Math.random())]);
+}
 
 
 function draw() {
@@ -79,32 +140,41 @@ function draw() {
   drawTetromino(backgroundGrid, {
     x: 0,
     y: 0
-  },1);
-  drawTetromino(player.tetromino,{x: player.position.x,y:ghost(backgroundGrid,player)},0.4);
-  drawTetromino(player.tetromino, player.position,1);
+  }, false);
+  drawTetromino(player.tetromino, {
+    x: player.position.x,
+    y: ghost(backgroundGrid, player)
+  },true);
+  drawTetromino(player.tetromino, player.position,false);
 }
 
 //Ghost function to find out at which y position to display the transparent tetromino
-function ghost(backgroundGrid,player){
+function ghost(backgroundGrid, player) {
   // debugger;
-  let temp=player.position.y;
-  let count=player.position.y;
+  let temp = player.position.y;
+  let count = player.position.y;
   while (collision(backgroundGrid, player) === false) {
     player.position.y++
-    count++;
+      count++;
   }
-  player.position.y=temp;
-  return count -1
+  player.position.y = temp;
+  return count - 1
 }
 
-function drawTetromino(matrix, offset,opacity) {
+function drawTetromino(matrix, offset,isGhost) {
   matrix.forEach((row, y) => {
-    row.forEach((value, x) => {  
+    row.forEach((value, x) => {
       if (value !== 0) {
-        ctx.fillStyle = "rgba(255, 0, 0, " + opacity + ")";
+        if (isGhost===true){
+          ctx.fillStyle = colorsGhost[value];
+          ctx.strokeStyle = borderColorGhost;
+        } else {
+          ctx.fillStyle = colors[value];
+          ctx.strokeStyle = borderColor;
+        }
+        
         ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
         ctx.beginPath();
-        ctx.strokeStyle = "black";
         ctx.lineWidth = "0.1";
         ctx.rect(x + offset.x, y + offset.y, 1, 1);
         ctx.stroke();
@@ -113,15 +183,15 @@ function drawTetromino(matrix, offset,opacity) {
   });
 }
 
+
 var player = {
   position: {
-    x: 1,
+    x: math.floor(backgroundGrid[0].length/2)-1,
     y: 0
   },
-  tetromino: list[Math.floor(Math.random() * list.length)]
+  tetromino: [],
 }
 
-// tetrominoShapes[Math.floor(Math.random() * tetrominoShapes.length)
 
 function rotation(dir, matrix) {
   if (dir == 1) {
@@ -142,6 +212,7 @@ function playerDrop() {
     player.position.y--;
     superpose(backgroundGrid, player);
     player.position.y = 0;
+    playerReset();
   }
 }
 
@@ -152,13 +223,14 @@ let lastTime = 0;
 
 function update() {
   draw();
-setInterval(function(){
-  playerDrop();
-  draw();
-},1000);
+  setInterval(function () {
+    playerDrop();
+    draw();
+  }, 1000);
 }
 
-update()
+playerReset();
+update();
 
 
 //Keyboard user input to move left/right, rotate, smashdown
@@ -191,7 +263,7 @@ document.onkeydown = function (e) {
       }
     }
   } else if (event.keyCode === 90) {
-    if (player.position.x < 5) {
+    if (player.position.x < math.floor(backgroundGrid[0].length/2)-1) {
       player.tetromino = rotation(1, player.tetromino)
       while (collision(backgroundGrid, player)) {
         player.position.x++;
