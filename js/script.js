@@ -55,6 +55,24 @@ function playerMove(offset) {
   }
 }
 
+function linecomplete() {
+  debugger;
+  outer: for (let y = backgroundGrid.length -1; y > 0; --y) {
+      for (let x = 0; x < backgroundGrid[y].length; ++x) {
+          if (backgroundGrid[y][x] === 0) {
+              continue outer;
+          }
+      }
+
+      const row = backgroundGrid.splice(y, 1)[0].fill(0);
+      backgroundGrid.unshift(row);
+      ++y;
+      document.getElementById('LineSound').play();
+  
+  }
+  
+}
+
 function createPiece(type) {
   if (type === 'I') {
     return [
@@ -135,7 +153,7 @@ function playerReset() {
 
 
 function draw() {
-  ctx.fillStyle = '#66ccff';
+  ctx.fillStyle = '#D3D8E0';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawTetromino(backgroundGrid, {
     x: 0,
@@ -207,6 +225,8 @@ function rotation(dir, matrix) {
   return matrixRotated
 }
 
+
+
 function playerDrop() {
   player.position.y++;
   if (collision(backgroundGrid, player)) {
@@ -215,6 +235,7 @@ function playerDrop() {
     player.position.x=math.floor(backgroundGrid[0].length/2)-1;
     player.position.y = 0;
     playerReset();
+    linecomplete();
   }
   
 }
