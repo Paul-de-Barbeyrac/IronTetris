@@ -203,6 +203,7 @@ function rotation(dir, matrix) {
       return e.reverse()
     }));
   }
+  document.getElementById('RotationSound').play();
   return matrixRotated
 }
 
@@ -211,9 +212,11 @@ function playerDrop() {
   if (collision(backgroundGrid, player)) {
     player.position.y--;
     superpose(backgroundGrid, player);
+    player.position.x=math.floor(backgroundGrid[0].length/2)-1;
     player.position.y = 0;
     playerReset();
   }
+  
 }
 
 let dropCounter = 0;
@@ -228,6 +231,8 @@ function update() {
     draw();
   }, 1000);
 }
+
+document.getElementById("BackgroundMusic").play();
 
 playerReset();
 update();
@@ -245,13 +250,14 @@ document.onkeydown = function (e) {
   } else if (event.keyCode === 32) {
     while (collision(backgroundGrid, player) === false) {
       player.position.y++;
+      document.getElementById('HardDropSound').play();
     }
     player.position.y--;
     superpose(backgroundGrid, player);
     playerDrop();
 
   } else if (event.keyCode === 65) {
-    if (player.position.x < 5) {
+    if (player.position.x < math.floor(backgroundGrid[0].length/2)-1) {
       player.tetromino = rotation(-1, player.tetromino)
       while (collision(backgroundGrid, player)) {
         player.position.x++;
