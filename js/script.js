@@ -219,6 +219,7 @@ function playerDrop() {
   
 }
 
+
 let dropCounter = 0;
 let dropInterval = 1000;
 
@@ -243,8 +244,10 @@ update();
 document.onkeydown = function (e) {
   if (event.keyCode === 37) {
     playerMove(-1);
+    document.getElementById('LeftRightSound').play();
   } else if (event.keyCode === 39) {
     playerMove(1);
+    document.getElementById('LeftRightSound').play();
   } else if (event.keyCode === 40) {
     playerDrop();
   } else if (event.keyCode === 32) {
