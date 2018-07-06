@@ -189,8 +189,8 @@ function draw() {
 }
 
 function drawNext() {
-  ctxNext.fillStyle = '#FFF7D7';
-  ctxNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
+  // ctxNext.fillStyle = '#FFF7D7';
+  // ctxNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
   drawTetromino(ctxNext,nextTetromino, {x:1,y:1},false);
 }
 
@@ -362,21 +362,33 @@ var interval = setInterval(function() {
 
 
 
-$('button').on('click', function(){
-  swal({
-    title: 'Really want to start a new game?',
-    text: "Your current game will be lost",
-    type: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, Sir!'
-  }).then((result) => {
-    if (result.value) {
-      playerReset();
-      update();
-      // break;
+// $('button').on('click', function(){
+//   swal({
+//     title: 'Really want to start a new game?',
+//     text: "Your current game will be lost",
+//     type: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     confirmButtonText: 'Yes, Sir!'
+//   }).then((result) => {
+//     if (result.value) {
+//       playerReset();
+//       update();
+//       // break;
 
-    }
-  })
-});
+//     }
+//   })
+// });
+
+
+var start = new Date().getTime();
+var now, elapsed, h, m, s, ms, format;
+setInterval(function() {
+  now = new Date().getTime();
+  elapsed = now - start;
+  m = Math.floor(elapsed % 3600000 / 60000);
+  s = Math.floor(elapsed % 60000 / 1000);
+  format = ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
+  document.getElementById("chrono").innerHTML = format;
+}, 1000);

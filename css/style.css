@@ -9,9 +9,6 @@ h2{
   color: #f50;
 } */
 
-body{
-  background-color: lightcoral;
-}
 
 
 /* .layout {
@@ -22,8 +19,8 @@ body{
 
 
   
-  canvas {
-    /* height:90vh; */
+  #Tetris {
+    height:90vh;
     border: solid 0.3em black;
   }
 
