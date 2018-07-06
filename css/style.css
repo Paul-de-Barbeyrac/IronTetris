@@ -14,16 +14,16 @@ body{
 }
 
 
-.layout {
+/* .layout {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  }
+  } */
 
 
   
   canvas {
-    height:90vh;
+    /* height:90vh; */
     border: solid 0.3em black;
   }
 

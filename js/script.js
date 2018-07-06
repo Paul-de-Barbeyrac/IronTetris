@@ -2,14 +2,20 @@
 var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
+var canvasNext = document.getElementById('NextTetromino');
+var ctxNext = canvasNext.getContext('2d');
+
 //Handling visual aspect of the Tetris based on dimensions of the grid (html) and tetromino size (user choice js)
 var width = canvas.width;
 var height = canvas.height;
 var ratio = height / width;
 var scaleFactor = 20;
 ctx.scale(scaleFactor, scaleFactor);
+ctxNext.scale(scaleFactor, scaleFactor);
 var numberColumns = width / scaleFactor;
 var backgroundGrid = createMatrix(numberColumns, numberColumns * ratio);
+
+
 
 //Function used to define the grid game
 function createMatrix(w, h) {
@@ -147,9 +153,13 @@ const colorsGhost = [
 const borderColor = 'rgb(0,0,0)'
 const borderColorGhost = 'rgb(0,0,0,0.35)'
 
+var pieces = 'IOTLJZS';
+var nextTetromino=createPiece(pieces[math.floor(pieces.length * Math.random())])
+
+
 function playerReset() {
-  const pieces = 'IOTLJZS';
-  player.tetromino = createPiece(pieces[math.floor(pieces.length * Math.random())]);
+  player.tetromino = nextTetromino ;
+  nextTetromino=createPiece(pieces[math.floor(pieces.length * Math.random())]);
   player.position.y = 0;
   player.position.x = math.floor(backgroundGrid[0].length / 2) -math.floor(player.tetromino[0].length / 2);
   if (collision(backgroundGrid, player)) {
@@ -167,15 +177,21 @@ function updateScore() {
 function draw() {
   ctx.fillStyle = '#D3D8E0';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawTetromino(backgroundGrid, {
+  drawTetromino(ctx,backgroundGrid, {
     x: 0,
     y: 0
   }, false);
-  drawTetromino(player.tetromino, {
+  drawTetromino(ctx,player.tetromino, {
     x: player.position.x,
     y: ghost(backgroundGrid, player)
   },true);
-  drawTetromino(player.tetromino, player.position,false);
+  drawTetromino(ctx,player.tetromino, player.position,false);
+}
+
+function drawNext() {
+  ctxNext.fillStyle = '#FFF7D7';
+  ctxNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
+  drawTetromino(ctxNext,nextTetromino, {x:1,y:1},false);
 }
 
 //Ghost function to find out at which y position to display the transparent tetromino
@@ -191,23 +207,23 @@ function ghost(backgroundGrid, player) {
   return count - 1
 }
 
-function drawTetromino(matrix, offset,isGhost) {
+function drawTetromino(context,matrix, offset,isGhost) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
         if (isGhost===true){
-          ctx.fillStyle = colorsGhost[value];
-          ctx.strokeStyle = borderColorGhost;
+          context.fillStyle = colorsGhost[value];
+          context.strokeStyle = borderColorGhost;
         } else {
-          ctx.fillStyle = colors[value];
-          ctx.strokeStyle = borderColor;
+          context.fillStyle = colors[value];
+          context.strokeStyle = borderColor;
         }
         
-        ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
-        ctx.beginPath();
-        ctx.lineWidth = "0.1";
-        ctx.rect(x + offset.x, y + offset.y, 1, 1);
-        ctx.stroke();
+        context.fillRect(x + offset.x, y + offset.y, 1, 1);
+        context.beginPath();
+        context.lineWidth = "0.1";
+        context.rect(x + offset.x, y + offset.y, 1, 1);
+        context.stroke();
       }
     });
   });
@@ -262,9 +278,11 @@ let lastTime = 0;
 
 function update() {
   draw();
+  drawNext();
   setInterval(function () {
     playerDrop();
     draw();
+    drawNext();
   }, 1000);
 }
 
@@ -273,7 +291,7 @@ function update() {
 playerReset();
 updateScore();
 update();
-document.getElementById("BackgroundMusic").play();
+// document.getElementById("BackgroundMusic").play();
 
 //Keyboard user input to move left/right, rotate, smashdown
 
@@ -321,6 +339,7 @@ document.onkeydown = function (e) {
     }
   }
   draw();
+  drawNext();
 }
 
 var seconds_left = 4;
