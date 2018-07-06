@@ -307,3 +307,26 @@ document.onkeydown = function (e) {
   }
   draw();
 }
+
+var seconds_left = 4;
+document.getElementById('timer_div').innerHTML = "Ready?"
+var interval = setInterval(function() {
+    document.getElementById('timer_div').innerHTML = --seconds_left;
+
+    if (seconds_left === 0)
+    {
+      document.getElementById('timer_div').innerHTML = "Go!";
+    }
+
+    if (seconds_left === -1)
+    {
+      document.getElementById('timer_div').className = 'invisible'
+       clearInterval(interval);
+    }
+
+
+}, 1000);
+
+
+
+

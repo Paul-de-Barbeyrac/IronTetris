@@ -26,3 +26,12 @@ body{
     height:90vh;
     border: solid 0.3em black;
   }
+
+
+  .visible{
+    visibility:visible;
+}
+
+.invisible{
+  visibility: hidden;
+}
