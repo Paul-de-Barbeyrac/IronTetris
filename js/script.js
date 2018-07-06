@@ -56,7 +56,7 @@ function playerMove(offset) {
 }
 
 function linecomplete() {
-  // debugger;
+  let rowCount = 1;
   outer: for (let y = backgroundGrid.length -1; y > 0; --y) {
       for (let x = 0; x < backgroundGrid[y].length; ++x) {
           if (backgroundGrid[y][x] === 0) {
@@ -68,7 +68,8 @@ function linecomplete() {
       backgroundGrid.unshift(row);
       ++y;
       document.getElementById('LineSound').play();
-  
+      player.score += rowCount * 10;
+      rowCount *= 2;
   }
   
 }
@@ -149,8 +150,19 @@ const borderColorGhost = 'rgb(0,0,0,0.35)'
 function playerReset() {
   const pieces = 'IOTLJZS';
   player.tetromino = createPiece(pieces[math.floor(pieces.length * Math.random())]);
+  player.position.y = 0;
+  player.position.x = math.floor(backgroundGrid[0].length / 2) -math.floor(player.tetromino[0].length / 2);
+  if (collision(backgroundGrid, player)) {
+      backgroundGrid.forEach(row => row.fill(0));
+      player.score = 0;
+      updateScore();
+  }
+
 }
 
+function updateScore() {
+  $('#score').text(player.score)
+}
 
 function draw() {
   ctx.fillStyle = '#D3D8E0';
@@ -208,6 +220,7 @@ var player = {
     y: 0
   },
   tetromino: [],
+  score:0, 
 }
 
 
@@ -236,6 +249,7 @@ function playerDrop() {
     player.position.y = 0;
     playerReset();
     linecomplete();
+    updateScore()
   }
   
 }
@@ -257,6 +271,7 @@ function update() {
 
 
 playerReset();
+updateScore();
 update();
 document.getElementById("BackgroundMusic").play();
 
@@ -328,3 +343,21 @@ var interval = setInterval(function() {
 
 
 
+$('button').on('click', function(){
+  swal({
+    title: 'Really want to start a new game?',
+    text: "Your current game will be lost",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Sir!'
+  }).then((result) => {
+    if (result.value) {
+      playerReset();
+      update();
+      // break;
+
+    }
+  })
+});
