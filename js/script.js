@@ -56,7 +56,7 @@ function playerMove(offset) {
 }
 
 function linecomplete() {
-  debugger;
+  // debugger;
   outer: for (let y = backgroundGrid.length -1; y > 0; --y) {
       for (let x = 0; x < backgroundGrid[y].length; ++x) {
           if (backgroundGrid[y][x] === 0) {
@@ -254,11 +254,11 @@ function update() {
   }, 1000);
 }
 
-document.getElementById("BackgroundMusic").play();
+
 
 playerReset();
 update();
-
+document.getElementById("BackgroundMusic").play();
 
 //Keyboard user input to move left/right, rotate, smashdown
 
@@ -323,8 +323,6 @@ var interval = setInterval(function() {
       document.getElementById('timer_div').className = 'invisible'
        clearInterval(interval);
     }
-
-
 }, 1000);
 
 
