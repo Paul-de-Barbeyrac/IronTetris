@@ -189,8 +189,8 @@ function draw() {
 }
 
 function drawNext() {
-  // ctxNext.fillStyle = '#FFF7D7';
-  // ctxNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
+  ctxNext.fillStyle = '#FFFFFF';
+  ctxNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
   drawTetromino(ctxNext,nextTetromino, {x:1,y:1},false);
 }
 

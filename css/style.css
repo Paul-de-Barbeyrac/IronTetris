@@ -32,3 +32,17 @@ h2{
 .invisible{
   visibility: hidden;
 }
+
+.next{
+    display: flex; /* contexte sur le parent */
+    flex-direction: row; /* direction d'affichage verticale */
+    align-self: center; /* alignement vertical */
+  }
+
+
+.next-text{
+    display: flex;
+    justify-content:center;
+    align-content:center;
+    flex-direction:column; /* column | row */
+}
