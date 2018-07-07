@@ -1,44 +1,60 @@
-/* 
-h2{
-  color: #0ff;
-  color: #f00;
-  color: #0f0;
-  color: #ff0;
-  color: #f0f;
-  color: #00f;
-  color: #f50;
-} */
-
-
-body{
-  background: linear-gradient(to top,#a1c4fd, #c2e9fb);
+html, body {
+  margin: 0;
+  height: 100%;
 }
 
-  
-  #Tetris {
-    height:90vh;
-    border: solid 0.3em black;
-  }
 
-
-  .visible{
-    visibility:visible;
+body {
+  background: linear-gradient(to top, #a1c4fd, #c2e9fb);
 }
 
-.invisible{
+h1,h2{
+  text-align: center;
+}
+
+#Tetris {
+  height: 90vh;
+  border: solid 0.3em black;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
   visibility: hidden;
 }
 
-.next{
-    display: flex; /* contexte sur le parent */
-    flex-direction: row; /* direction d'affichage verticale */
-    align-self: center; /* alignement vertical */
-  }
+.next {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
 
+.next-text {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
 
-.next-text{
-    display: flex;
-    justify-content:center;
-    align-content:center;
-    flex-direction:column; /* column | row */
+.leftPanel {
+  border: solid 0.3em black;
+}
+
+.header{
+  height:5vh;
+}
+
+/* .row{
+  display: flex;
+  justify-content: left;
+} */
+
+.container{
+  display: flex;
+  justify-content: center;
 }

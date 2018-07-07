@@ -15,18 +15,13 @@
 </head>
 
 <body>
-
-  <div class="col-12">
-    <h1>Iron Tetris</h1>
-  </div>
-
   <div class="container">
     <div class="row">
-
-
-      <div class="col-6">
+      <div class="col-6 leftPanel">
+          <h1>Iron Tetris</h1>
+          <h2>Score</h2>
         <div class="timer"></div>
-        <span>Timer : </span>
+        <span>Time : </span>
         <span id="chrono"></span>
         <div class="Level"></div>
         <span>Level :</span>
@@ -34,6 +29,10 @@
           <span>Score :</span>
           <a id="score">0</a>
         </div>
+        <div class="line">
+            <span>Tetromino dropped :</span>
+            <a id="TetrominoDropped">0</a>
+          </div>
         <div class="line">
           <span>Line completed :</span>
           <a id="lines">0</a>
@@ -43,15 +42,28 @@
             <p>Next piece :</p>
           </div>
           <div>
+              <h2>Comming Next</h2>
             <canvas id="NextTetromino" width="100" height="100"></canvas>
           </div>
         </div>
+
+          <h2>Bonus</h2>
+        <button type="button" class="btn btn-primary">Cool down</button>
+        <button type="button" class="btn btn-success">Sniper Mode</button>
+        <button type="button" class="btn btn-danger">Atomic Bomb</button>
+
+        <h2>Malus</h2>
+        <button type="button" class="btn btn-primary">Polymorph</button>
+        <button type="button" class="btn btn-success">No Ghost</button>
+        <button type="button" class="btn btn-danger">Blind</button>
+
+        <h2>Malus</h2>
+
       </div>
 
-
-
-      <div class="col-6">
-        <canvas id="Tetris" width="500" height="800"></canvas>
+      
+      <div class="col-6  rightPanel">
+        <canvas id="Tetris" width="400" height="800"></canvas>
       </div>
 
 
@@ -62,35 +74,40 @@
 
 
 
-    <div id="container-tetris">
-      <div id="timer_div" class="Visible"></div>
-
-    </div>
+ 
   </div>
-  <!-- <button type="button" class="btn btn-success">Success</button> -->
+
 
   <audio id="BackgroundMusic">
-    <source src="music/music1.mp3" type="audio/mpeg">
+    <source src="music/BackgroundMusic.mp3" type="audio/mpeg">
   </audio>
 
   <audio id="RotationSound">
-    <source src="music/sound effects/SFX_ButtonUp.ogg " type="audio/ogg" volume="1">
+    <source src="music/SFX_ButtonUp.ogg " type="audio/ogg">
+  </audio>
+
+  <audio id="GameOver">
+    <source src="music/SFX_GameOver.ogg" type="audio/ogg">
   </audio>
 
   <audio id="HardDropSound">
-      <source src="music/sound effects/SFX_PieceRotateLR.ogg" type="audio/ogg">
+    <source src="music/SFX_PieceRotateLR.ogg" type="audio/ogg">
   </audio>
 
   <audio id="LevelUp">
-      <source src="music/sound effects/SFX_LevelUp.ogg" type="audio/ogg">
-    </audio>
+    <source src="music/SFX_LevelUp.ogg" type="audio/ogg">
+  </audio>
 
   <audio id="LeftRightSound">
-    <source src="music/sound effects/SFX_PieceSoftDrop.ogg" type="audio/ogg">
+    <source src="music/SFX_PieceSoftDrop.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="Bonus">
+    <source src="music/SFX_Splash.ogg" type="audio/ogg">
   </audio>
 
   <audio id="LineSound">
-    <source src="music/sound effects/SFX_SpecialTetris.ogg" type="audio/ogg">
+    <source src="music/SFX_SpecialTetris.ogg" type="audio/ogg">
   </audio>
 
   <script type="text/javascript" src="js/script.js"></script>

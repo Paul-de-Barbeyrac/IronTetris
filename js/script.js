@@ -1,7 +1,8 @@
-//Rendering canvas
+//Rendering main canva 
 var canvas = document.getElementById('Tetris');
 var ctx = canvas.getContext('2d');
 
+//Rendering canva for next tetromino display
 var canvasNext = document.getElementById('NextTetromino');
 var ctxNext = canvasNext.getContext('2d');
 
@@ -185,6 +186,18 @@ const borderColorGhost = 'rgb(0,0,0,0.35)'
 var pieces = 'IOTLJZS';
 var nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())])
 
+function titleCustom(score) {
+  if (score < 20) {
+    result = "Come on kid, you can do better!";
+  } else if (score < 100) {
+    result = "Well done, you are on the right path!";
+  } else if (score < 200) {
+    result = "Look at you Wizard master";
+  } else if (score < 400) {
+    result = "You are not human!";
+  }
+  return result
+}
 
 function playerReset() {
   player.tetromino = nextTetromino;
@@ -192,25 +205,6 @@ function playerReset() {
   player.position.y = 0;
   player.position.x = math.floor(backgroundGrid[0].length / 2) - math.floor(player.tetromino[0].length / 2);
   if (collision(backgroundGrid, player)) {
-    // swal(
-    //   'Good job!',
-    //   'You clicked the button!',
-    //   'success'
-    // );
-
-    function titleCustom(score) {
-      if (score < 20) {
-        result = "Come on kid, you can do better!";
-      } else if (score < 100) {
-        result = "Well done, you are on the right path!";
-      } else if (score < 200) {
-        result = "Look at you Wizard master";
-      } else if (score < 400) {
-        result = "You are not human!";
-      }
-      return result
-    }
-
     swal({
       title: titleCustom(player.score),
       // text: 'Modal with a custom image.',
@@ -330,11 +324,6 @@ function playerDrop() {
 }
 
 
-let dropCounter = 0;
-let dropInterval = 1000;
-
-let lastTime = 0;
-
 function update() {
   draw();
   drawNext();
@@ -346,11 +335,7 @@ function update() {
 }
 
 
-var vid = document.getElementById("BackgroundMusic");
-vid.volume = 0.01;
-playerReset();
-updateScore();
-update();
+
 //Keyboard user input to move left/right, rotate, smashdown
 
 document.onkeydown = function (e) {
@@ -402,43 +387,6 @@ document.onkeydown = function (e) {
   drawNext();
 }
 
-var seconds_left = 4;
-document.getElementById('timer_div').innerHTML = "Ready?"
-var interval = setInterval(function () {
-  document.getElementById('timer_div').innerHTML = --seconds_left;
-
-  if (seconds_left === 0) {
-    document.getElementById('timer_div').innerHTML = "Go!";
-  }
-
-  if (seconds_left === -1) {
-    document.getElementById('timer_div').className = 'invisible'
-    clearInterval(interval);
-  }
-}, 1000);
-
-
-
-
-// $('button').on('click', function(){
-//   swal({
-//     title: 'Really want to start a new game?',
-//     text: "Your current game will be lost",
-//     type: 'warning',
-//     showCancelButton: true,
-//     confirmButtonColor: '#3085d6',
-//     cancelButtonColor: '#d33',
-//     confirmButtonText: 'Yes, Sir!'
-//   }).then((result) => {
-//     if (result.value) {
-//       playerReset();
-//       update();
-//       // break;
-
-//     }
-//   })
-// });
-
 function chronometer() {
   var start = new Date().getTime();
   var now, elapsed, h, m, s, ms, format;
@@ -451,3 +399,44 @@ function chronometer() {
     document.getElementById("chrono").innerHTML = format;
   }, 1000);
 }
+
+swal({
+  title: 'Wecome to Iron Tetris',
+  text: 'Let me give you a quick tour',
+  imageUrl: 'images/templatebackground.png',
+  imageWidth: 400,
+  imageHeight: 200,
+  animation: false
+}).then(()=>{
+  swal({
+    title: 'Keyboard',
+    text: 'Use the keys above to move and rotate pieces',
+    imageUrl: 'images/keyboard.png',
+    imageWidth: 706,
+    imageHeight: 305,
+    animation: true
+  }).then(()=>{
+    swal({
+      title: 'Mouse',
+      text: 'Click on the bonus buttons but choose your timing wisely!',
+      imageUrl: 'images/keyboard.png',
+      imageWidth: 706,
+      imageHeight: 305,
+      animation: false
+    }).then(()=>{
+      swal({
+        title: "Enough talking, get ready!",
+        text: "Game starts in 3 seconds.",
+        timer: 3000,
+        showConfirmButton: false
+      })})
+  })
+})
+
+
+
+var vid = document.getElementById("BackgroundMusic");
+vid.volume = 0.01;
+playerReset();
+updateScore();
+update();
