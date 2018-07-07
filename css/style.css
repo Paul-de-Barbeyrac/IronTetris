@@ -10,13 +10,9 @@ h2{
 } */
 
 
-
-/* .layout {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  } */
-
+body{
+  background: linear-gradient(to top,#a1c4fd, #c2e9fb);
+}
 
   
   #Tetris {

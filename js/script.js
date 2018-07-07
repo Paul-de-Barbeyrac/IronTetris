@@ -63,21 +63,21 @@ function playerMove(offset) {
 
 function linecomplete() {
   let rowCount = 1;
-  outer: for (let y = backgroundGrid.length -1; y > 0; --y) {
-      for (let x = 0; x < backgroundGrid[y].length; ++x) {
-          if (backgroundGrid[y][x] === 0) {
-              continue outer;
-          }
+  outer: for (let y = backgroundGrid.length - 1; y > 0; --y) {
+    for (let x = 0; x < backgroundGrid[y].length; ++x) {
+      if (backgroundGrid[y][x] === 0) {
+        continue outer;
       }
+    }
 
-      const row = backgroundGrid.splice(y, 1)[0].fill(0);
-      backgroundGrid.unshift(row);
-      ++y;
-      document.getElementById('LineSound').play();
-      player.score += rowCount * 10;
-      rowCount *= 2;
+    const row = backgroundGrid.splice(y, 1)[0].fill(0);
+    backgroundGrid.unshift(row);
+    ++y;
+    document.getElementById('LineSound').play();
+    player.score += rowCount * 10;
+    rowCount *= 2;
   }
-  
+
 }
 
 function createPiece(type) {
@@ -92,14 +92,14 @@ function createPiece(type) {
     return [
       [2, 2],
       [2, 2],
-    ];}
-    else if (type === 'T') {
-      return [
-        [0, 3, 0],
-        [3, 3, 3],
-        [0, 0, 0],
-      ];
-    
+    ];
+  } else if (type === 'T') {
+    return [
+      [0, 3, 0],
+      [3, 3, 3],
+      [0, 0, 0],
+    ];
+
   } else if (type === 'L') {
     return [
       [0, 4, 0],
@@ -125,6 +125,33 @@ function createPiece(type) {
       [7, 7, 0],
       [0, 0, 0],
     ];
+  } else if (type === 'V') {
+    return [
+      [8, 8, 8],
+      [8, 0, 8],
+      [8, 8, 8],
+    ];
+  }
+  else if (type === 'W') {
+    return [
+      [0, 0, 8],
+      [0, 8, 0],
+      [8, 0, 0],
+    ];
+  }
+  else if (type === 'X') {
+    return [
+      [8, 0, 8],
+      [0, 8, 0],
+      [8, 0, 8],
+    ];
+  }
+  else if (type === 'Y') {
+    return [
+      [8, 0, 8],
+      [8, 0, 8],
+      [8, 0, 8],
+    ];
   }
 }
 
@@ -137,6 +164,7 @@ const colors = [
   'rgb(55,0,255)',
   'rgb(255,0,0)',
   'rgb(0,255,0)',
+  'rgb(0,0,0)',
 ];
 
 const colorsGhost = [
@@ -148,20 +176,21 @@ const colorsGhost = [
   'rgb(55,0,255,0.35)',
   'rgb(255,0,0,0.35)',
   'rgb(0,255,0,0.35)',
+  'rgb(0,0,0,0.35)',
 ];
 
 const borderColor = 'rgb(0,0,0)'
 const borderColorGhost = 'rgb(0,0,0,0.35)'
 
 var pieces = 'IOTLJZS';
-var nextTetromino=createPiece(pieces[math.floor(pieces.length * Math.random())])
+var nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())])
 
 
 function playerReset() {
-  player.tetromino = nextTetromino ;
-  nextTetromino=createPiece(pieces[math.floor(pieces.length * Math.random())]);
+  player.tetromino = nextTetromino;
+  nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())]);
   player.position.y = 0;
-  player.position.x = math.floor(backgroundGrid[0].length / 2) -math.floor(player.tetromino[0].length / 2);
+  player.position.x = math.floor(backgroundGrid[0].length / 2) - math.floor(player.tetromino[0].length / 2);
   if (collision(backgroundGrid, player)) {
     // swal(
     //   'Good job!',
@@ -169,31 +198,31 @@ function playerReset() {
     //   'success'
     // );
 
-function titleCustom(score){
-  if (score<20){
-    result="Come on kid, you can do better!";
-  } else if (score<100){
-    result="Well done, you are on the right path!";
-  } else if (score<200){
-    result="Look at you Wizard master";
-  } else if (score<400){
-    result="You are not human!";
-  }
-  return result
-}
+    function titleCustom(score) {
+      if (score < 20) {
+        result = "Come on kid, you can do better!";
+      } else if (score < 100) {
+        result = "Well done, you are on the right path!";
+      } else if (score < 200) {
+        result = "Look at you Wizard master";
+      } else if (score < 400) {
+        result = "You are not human!";
+      }
+      return result
+    }
 
-swal({
-  title: titleCustom(player.score),
-  // text: 'Modal with a custom image.',
-  imageUrl: 'images/templatebackground.png',
-  imageWidth: 400,
-  imageHeight: 200,
-  imageAlt: 'Custom image',
-  animation: true
-})
-      backgroundGrid.forEach(row => row.fill(0));
-      player.score = 0;
-      updateScore();
+    swal({
+      title: titleCustom(player.score),
+      // text: 'Modal with a custom image.',
+      imageUrl: 'images/templatebackground.png',
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: 'Custom image',
+      animation: true
+    })
+    backgroundGrid.forEach(row => row.fill(0));
+    player.score = 0;
+    updateScore();
   }
 
 }
@@ -203,23 +232,25 @@ function updateScore() {
 }
 
 function draw() {
-  ctx.fillStyle = '#D3D8E0';
+  ctx.fillStyle = 'white';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  drawTetromino(ctx,backgroundGrid, {
+  drawTetromino(ctx, backgroundGrid, {
     x: 0,
     y: 0
   }, false);
-  drawTetromino(ctx,player.tetromino, {
+  drawTetromino(ctx, player.tetromino, {
     x: player.position.x,
     y: ghost(backgroundGrid, player)
-  },true);
-  drawTetromino(ctx,player.tetromino, player.position,false);
+  }, true);
+  drawTetromino(ctx, player.tetromino, player.position, false);
 }
 
 function drawNext() {
-  ctxNext.fillStyle = '#FFFFFF';
-  ctxNext.fillRect(0, 0, canvasNext.width, canvasNext.height);
-  drawTetromino(ctxNext,nextTetromino, {x:1,y:1},false);
+  ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
+  drawTetromino(ctxNext, nextTetromino, {
+    x: 1, 
+    y: 1
+  }, false);
 }
 
 //Ghost function to find out at which y position to display the transparent tetromino
@@ -235,18 +266,18 @@ function ghost(backgroundGrid, player) {
   return count - 1
 }
 
-function drawTetromino(context,matrix, offset,isGhost) {
+function drawTetromino(context, matrix, offset, isGhost) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        if (isGhost===true){
+        if (isGhost === true) {
           context.fillStyle = colorsGhost[value];
           context.strokeStyle = borderColorGhost;
         } else {
           context.fillStyle = colors[value];
           context.strokeStyle = borderColor;
         }
-        
+
         context.fillRect(x + offset.x, y + offset.y, 1, 1);
         context.beginPath();
         context.lineWidth = "0.1";
@@ -260,11 +291,11 @@ function drawTetromino(context,matrix, offset,isGhost) {
 
 var player = {
   position: {
-    x: math.floor(backgroundGrid[0].length/2)-1,
+    x: math.floor(backgroundGrid[0].length / 2) - 1,
     y: 0
   },
   tetromino: [],
-  score:0, 
+  score: 0,
 }
 
 
@@ -289,13 +320,13 @@ function playerDrop() {
   if (collision(backgroundGrid, player)) {
     player.position.y--;
     superpose(backgroundGrid, player);
-    player.position.x=math.floor(backgroundGrid[0].length/2)-1;
+    player.position.x = math.floor(backgroundGrid[0].length / 2) - 1;
     player.position.y = 0;
     playerReset();
     linecomplete();
     updateScore()
   }
-  
+
 }
 
 
@@ -315,15 +346,16 @@ function update() {
 }
 
 
-
+var vid = document.getElementById("BackgroundMusic");
+vid.volume = 0.01;
 playerReset();
 updateScore();
 update();
-// document.getElementById("BackgroundMusic").play();
-
 //Keyboard user input to move left/right, rotate, smashdown
 
 document.onkeydown = function (e) {
+  document.getElementById("BackgroundMusic").play();
+  chronometer();
   if (event.keyCode === 37) {
     playerMove(-1);
     document.getElementById('LeftRightSound').play();
@@ -342,7 +374,7 @@ document.onkeydown = function (e) {
     playerDrop();
 
   } else if (event.keyCode === 65) {
-    if (player.position.x < math.floor(backgroundGrid[0].length/2)-1) {
+    if (player.position.x < math.floor(backgroundGrid[0].length / 2) - 1) {
       player.tetromino = rotation(-1, player.tetromino)
       while (collision(backgroundGrid, player)) {
         player.position.x++;
@@ -354,7 +386,7 @@ document.onkeydown = function (e) {
       }
     }
   } else if (event.keyCode === 90) {
-    if (player.position.x < math.floor(backgroundGrid[0].length/2)-1) {
+    if (player.position.x < math.floor(backgroundGrid[0].length / 2) - 1) {
       player.tetromino = rotation(1, player.tetromino)
       while (collision(backgroundGrid, player)) {
         player.position.x++;
@@ -372,19 +404,17 @@ document.onkeydown = function (e) {
 
 var seconds_left = 4;
 document.getElementById('timer_div').innerHTML = "Ready?"
-var interval = setInterval(function() {
-    document.getElementById('timer_div').innerHTML = --seconds_left;
+var interval = setInterval(function () {
+  document.getElementById('timer_div').innerHTML = --seconds_left;
 
-    if (seconds_left === 0)
-    {
-      document.getElementById('timer_div').innerHTML = "Go!";
-    }
+  if (seconds_left === 0) {
+    document.getElementById('timer_div').innerHTML = "Go!";
+  }
 
-    if (seconds_left === -1)
-    {
-      document.getElementById('timer_div').className = 'invisible'
-       clearInterval(interval);
-    }
+  if (seconds_left === -1) {
+    document.getElementById('timer_div').className = 'invisible'
+    clearInterval(interval);
+  }
 }, 1000);
 
 
@@ -409,14 +439,15 @@ var interval = setInterval(function() {
 //   })
 // });
 
-
-var start = new Date().getTime();
-var now, elapsed, h, m, s, ms, format;
-setInterval(function() {
-  now = new Date().getTime();
-  elapsed = now - start;
-  m = Math.floor(elapsed % 3600000 / 60000);
-  s = Math.floor(elapsed % 60000 / 1000);
-  format = ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
-  document.getElementById("chrono").innerHTML = format;
-}, 1000);
+function chronometer() {
+  var start = new Date().getTime();
+  var now, elapsed, h, m, s, ms, format;
+  setInterval(function () {
+    now = new Date().getTime();
+    elapsed = now - start;
+    m = Math.floor(elapsed % 3600000 / 60000);
+    s = Math.floor(elapsed % 60000 / 1000);
+    format = ("0" + m).slice(-2) + ":" + ("0" + s).slice(-2);
+    document.getElementById("chrono").innerHTML = format;
+  }, 1000);
+}
