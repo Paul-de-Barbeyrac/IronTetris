@@ -163,6 +163,34 @@ function playerReset() {
   player.position.y = 0;
   player.position.x = math.floor(backgroundGrid[0].length / 2) -math.floor(player.tetromino[0].length / 2);
   if (collision(backgroundGrid, player)) {
+    // swal(
+    //   'Good job!',
+    //   'You clicked the button!',
+    //   'success'
+    // );
+
+function titleCustom(score){
+  if (score<20){
+    result="Come on kid, you can do better!";
+  } else if (score<100){
+    result="Well done, you are on the right path!";
+  } else if (score<200){
+    result="Look at you Wizard master";
+  } else if (score<400){
+    result="You are not human!";
+  }
+  return result
+}
+
+swal({
+  title: titleCustom(player.score),
+  // text: 'Modal with a custom image.',
+  imageUrl: 'images/templatebackground.png',
+  imageWidth: 400,
+  imageHeight: 200,
+  imageAlt: 'Custom image',
+  animation: true
+})
       backgroundGrid.forEach(row => row.fill(0));
       player.score = 0;
       updateScore();
