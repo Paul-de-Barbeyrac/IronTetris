@@ -5,7 +5,12 @@ html, body {
 
 
 body {
-  background: linear-gradient(to top, #a1c4fd, #c2e9fb);
+  /* background: linear-gradient(to top, #a1c4fd, #c2e9fb); */
+  background:url('./../images/templatebackgroundbis.jpeg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 h1,h2{
@@ -42,7 +47,9 @@ h1,h2{
 }
 
 .leftPanel {
+  color:black;
   border: solid 0.3em black;
+  background:white;
 }
 
 .header{

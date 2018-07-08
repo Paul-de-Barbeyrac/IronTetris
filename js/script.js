@@ -77,6 +77,7 @@ function linecomplete() {
     document.getElementById('LineSound').play();
     player.score += rowCount * 10;
     rowCount *= 2;
+    player.linesNumber++
   }
 
 }
@@ -204,6 +205,7 @@ function playerReset() {
   nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())]);
   player.position.y = 0;
   player.position.x = math.floor(backgroundGrid[0].length / 2) - math.floor(player.tetromino[0].length / 2);
+  player.tetrominoDropped++
   if (collision(backgroundGrid, player)) {
     swal({
       title: titleCustom(player.score),
@@ -216,14 +218,16 @@ function playerReset() {
     })
     backgroundGrid.forEach(row => row.fill(0));
     player.score = 0;
+    player.linesNumber = 0;
+   player.tetrominoDropped=0;
+   start = new Date().getTime();
+   chronometer();
     updateScore();
   }
 
 }
 
-function updateScore() {
-  $('#score').text(player.score)
-}
+
 
 function draw() {
   ctx.fillStyle = 'white';
@@ -282,6 +286,11 @@ function drawTetromino(context, matrix, offset, isGhost) {
   });
 }
 
+function updateScore() {
+  $('#score').text(player.score)
+  $('#lines').text(player.linesNumber)
+  $('#tetrominoDropped').text(player.tetrominoDropped)
+}
 
 var player = {
   position: {
@@ -290,6 +299,8 @@ var player = {
   },
   tetromino: [],
   score: 0,
+  linesNumber : 0,
+ tetrominoDropped:0,
 }
 
 
@@ -340,7 +351,6 @@ function update() {
 
 document.onkeydown = function (e) {
   document.getElementById("BackgroundMusic").play();
-  chronometer();
   if (event.keyCode === 37) {
     playerMove(-1);
     document.getElementById('LeftRightSound').play();
@@ -387,9 +397,10 @@ document.onkeydown = function (e) {
   drawNext();
 }
 
+var start = new Date().getTime();
+var now, elapsed, m, s, format;
+
 function chronometer() {
-  var start = new Date().getTime();
-  var now, elapsed, h, m, s, ms, format;
   setInterval(function () {
     now = new Date().getTime();
     elapsed = now - start;
@@ -400,38 +411,54 @@ function chronometer() {
   }, 1000);
 }
 
-swal({
-  title: 'Wecome to Iron Tetris',
-  text: 'Let me give you a quick tour',
-  imageUrl: 'images/templatebackground.png',
-  imageWidth: 400,
-  imageHeight: 200,
-  animation: false
-}).then(()=>{
-  swal({
-    title: 'Keyboard',
-    text: 'Use the keys above to move and rotate pieces',
-    imageUrl: 'images/keyboard.png',
-    imageWidth: 706,
-    imageHeight: 305,
-    animation: true
-  }).then(()=>{
+
+//Found on StackOverflow a way to run introduction tour only once.
+window.onload = function () {
+  if (localStorage.getItem("hasCodeRunBefore") === null) {
+  
+    //Discovered promises in the documentation of Sweet Alert
     swal({
-      title: 'Mouse',
-      text: 'Click on the bonus buttons but choose your timing wisely!',
-      imageUrl: 'images/keyboard.png',
-      imageWidth: 706,
-      imageHeight: 305,
+      title: 'Wecome to Iron Tetris',
+      text: 'Let me give you a quick tour',
+      imageUrl: 'images/templatebackground.png',
+      imageWidth: 400,
+      imageHeight: 200,
       animation: false
     }).then(()=>{
       swal({
-        title: "Enough talking, get ready!",
-        text: "Game starts in 3 seconds.",
-        timer: 3000,
-        showConfirmButton: false
-      })})
-  })
-})
+        title: 'Keyboard',
+        text: 'Use the keys above to move and rotate pieces',
+        imageUrl: 'images/keyboard.png',
+        imageWidth: 706,
+        imageHeight: 305,
+        animation: true
+      }).then(()=>{
+        swal({
+          title: 'Mouse',
+          text: 'Click on the bonus buttons but choose your timing wisely!',
+          imageUrl: 'images/keyboard.png',
+          imageWidth: 706,
+          imageHeight: 305,
+          animation: false
+        }).then(()=>{
+          swal({
+            title: "Enough talking, show me what you got!",
+            // text: "Game starts in 3 seconds.",
+            timer: 3000,
+            showConfirmButton: false
+          })})
+      })
+    })
+
+      localStorage.setItem("hasCodeRunBefore", true);
+  } 
+}
+
+
+function level (){
+  result=(math.floor(elapsed/1000))%30;
+  return 
+}
 
 
 
@@ -440,3 +467,10 @@ vid.volume = 0.01;
 playerReset();
 updateScore();
 update();
+chronometer();
+
+$(document).ready(function(){
+  $("#CoolDown").click(function(){
+      $(this).addClass('disabled');
+  });
+});
