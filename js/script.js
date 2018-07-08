@@ -16,6 +16,19 @@ ctxNext.scale(scaleFactor, scaleFactor);
 var numberColumns = width / scaleFactor;
 var backgroundGrid = createMatrix(numberColumns, numberColumns * ratio);
 
+var player = {
+  position: {
+    x: math.floor(backgroundGrid[0].length / 2) - 1,
+    y: 0
+  },
+  tetromino: [],
+  score: 0,
+  linesNumber : 0,
+ tetrominoDropped:0,
+ level:1,
+ speed:1000,
+}
+
 
 
 //Function used to define the grid game
@@ -222,7 +235,6 @@ function playerReset() {
    player.tetrominoDropped=0;
    start = new Date().getTime();
    chronometer();
-    updateScore();
   }
 
 }
@@ -290,18 +302,10 @@ function updateScore() {
   $('#score').text(player.score)
   $('#lines').text(player.linesNumber)
   $('#tetrominoDropped').text(player.tetrominoDropped)
+  $('#level').text(player.level)
 }
 
-var player = {
-  position: {
-    x: math.floor(backgroundGrid[0].length / 2) - 1,
-    y: 0
-  },
-  tetromino: [],
-  score: 0,
-  linesNumber : 0,
- tetrominoDropped:0,
-}
+
 
 
 function rotation(dir, matrix) {
@@ -329,7 +333,6 @@ function playerDrop() {
     player.position.y = 0;
     playerReset();
     linecomplete();
-    updateScore()
   }
 
 }
@@ -338,12 +341,14 @@ function playerDrop() {
 function update() {
   draw();
   drawNext();
-  setInterval(function () {
-    playerDrop();
-    draw();
-    drawNext();
-  }, 1000);
+  playerDrop();
+  player.level=math.floor(elapsed/1000/30);
+  player.speed=Math.max(100,1000-player.level*50);
+  updateScore();
+  setTimeout(update,player.speed)
 }
+
+
 
 
 
@@ -455,18 +460,12 @@ window.onload = function () {
 }
 
 
-function level (){
-  result=(math.floor(elapsed/1000))%30;
-  return 
-}
-
-
-
 var vid = document.getElementById("BackgroundMusic");
-vid.volume = 0.01;
-playerReset();
+vid.volume = 0.07;
 updateScore();
-update();
+playerReset();
+draw();
+setTimeout(update,1000)
 chronometer();
 
 $(document).ready(function(){

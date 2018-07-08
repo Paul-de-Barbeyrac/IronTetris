@@ -1,20 +1,41 @@
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
 }
 
+/* @font-face {
+  font-family: "My Custom Font";
+  src: url(./../font/tetris.ttf) format("truetype");
+} */
+
 
 body {
-  /* background: linear-gradient(to top, #a1c4fd, #c2e9fb); */
-  background:url('./../images/templatebackgroundbis.jpeg') no-repeat center center fixed; 
+  background: url('./../images/templatebackgroundbis.jpeg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
 
-h1,h2{
+h1 {
   text-align: center;
+  /* font-family: "My Custom Font"; */
+  font-family: fantasy;
+  font-size:78px;
+}
+
+h3 {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
 #Tetris {
@@ -25,43 +46,58 @@ h1,h2{
   align-content: center;
 }
 
-.visible {
-  visibility: visible;
+.leftPanel {
+  margin-right: 100px;
 }
 
-.invisible {
-  visibility: hidden;
-}
-
-.next {
+.rightPanel {
+  color: white;
+  border: solid 0.3em white;
+  background: black;
   display: flex;
-  flex-direction: row;
-  align-self: center;
+  flex-direction: column;
+  text-align: left;
+  width: 450px;
+  justify-content:space-evenly;
+
 }
 
-.next-text {
+.row2 {
   display: flex;
-  justify-content: center;
-  align-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score {
+  display: flex;
   flex-direction: column;
 }
 
-.leftPanel {
-  color:black;
-  border: solid 0.3em black;
-  background:white;
-}
-
-.header{
-  height:5vh;
-}
-
-/* .row{
+.row {
   display: flex;
-  justify-content: left;
+  flex-wrap: nowrap;
+}
+
+.bonus {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+}
+
+/* .malus{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
 } */
 
-.container{
+.boutton {
+  margin: 7px 50px;
+}
+
+.row3 {
   display: flex;
-  justify-content: center;
+}
+
+.row4{
+  text-align: center;
 }
