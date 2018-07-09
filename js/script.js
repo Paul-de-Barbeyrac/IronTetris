@@ -11,8 +11,9 @@ var width = canvas.width;
 var height = canvas.height;
 var ratio = height / width;
 var scaleFactor = 20;
+var scaleFactorNext = 20;
 ctx.scale(scaleFactor, scaleFactor);
-ctxNext.scale(scaleFactor, scaleFactor);
+ctxNext.scale(scaleFactorNext, scaleFactorNext);
 var numberColumns = width / scaleFactor;
 var backgroundGrid = createMatrix(numberColumns, numberColumns * ratio);
 
@@ -168,9 +169,16 @@ function createPiece(type) {
       [8, 0, 8],
     ];
   }
+  else if (type === 'A') {
+    return [
+      [0, 9, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ];
+  }
 }
 
-const colors = [
+var colors = [
   null,
   'rgb(0,255,255)',
   'rgb(251,255,0)',
@@ -180,9 +188,10 @@ const colors = [
   'rgb(255,0,0)',
   'rgb(0,255,0)',
   'rgb(0,0,0)',
+  'rgb(255,215,0)',
 ];
 
-const colorsGhost = [
+var colorsGhost = [
   null,
   'rgb(0,255,255,0.35)',
   'rgb(251,255,0,0.35)',
@@ -192,10 +201,11 @@ const colorsGhost = [
   'rgb(255,0,0,0.35)',
   'rgb(0,255,0,0.35)',
   'rgb(0,0,0,0.35)',
+  'rgb(255,215,0,0.35)',
 ];
 
-const borderColor = 'rgb(0,0,0)'
-const borderColorGhost = 'rgb(0,0,0,0.35)'
+var borderColor = 'rgb(0,0,0)'
+var borderColorGhost = 'rgb(0,0,0,0.35)'
 
 var pieces = 'IOTLJZS';
 var nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())])
@@ -212,6 +222,30 @@ function titleCustom(score) {
   }
   return result
 }
+
+function resetButtons() {
+  $( "#CoolDown" ).prop( "disabled", false );
+  $( "#CoolDown" ).removeClass('disabled');
+
+  $( "#Sniper" ).prop( "disabled", false );
+  $( "#Sniper" ).removeClass('disabled');
+
+  $( "#Atomic" ).prop( "disabled", false );
+  $( "#Atomic" ).removeClass('disabled');
+
+  $( "#Polymorph" ).prop( "disabled", false );
+  $( "#Polymorph" ).removeClass('disabled');
+
+  $( "#noGhost" ).prop( "disabled", false );
+  $( "#noGhost" ).removeClass('disabled');
+  
+  $( "#Blind" ).prop( "disabled", false );
+  $( "#Blind" ).removeClass('disabled');
+
+}
+
+
+
 
 function playerReset() {
   player.tetromino = nextTetromino;
@@ -235,6 +269,7 @@ function playerReset() {
    player.tetrominoDropped=0;
    start = new Date().getTime();
    chronometer();
+resetButtons();
   }
 
 }
@@ -255,12 +290,15 @@ function draw() {
   drawTetromino(ctx, player.tetromino, player.position, false);
 }
 
+var blind=false;
+
 function drawNext() {
   ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
+  if (!blind){
   drawTetromino(ctxNext, nextTetromino, {
     x: 1, 
     y: 1
-  }, false);
+  }, false);}
 }
 
 //Ghost function to find out at which y position to display the transparent tetromino
@@ -337,13 +375,15 @@ function playerDrop() {
 
 }
 
+var customSpeed=1000;
 
 function update() {
+  player.speed=customSpeed;
   draw();
   drawNext();
   playerDrop();
   player.level=math.floor(elapsed/1000/30);
-  player.speed=Math.max(100,1000-player.level*50);
+  player.speed=Math.max(100,player.speed-player.level*50);
   updateScore();
   setTimeout(update,player.speed)
 }
@@ -468,8 +508,89 @@ draw();
 setTimeout(update,1000)
 chronometer();
 
+var timeoutId = 
+
+
+
 $(document).ready(function(){
   $("#CoolDown").click(function(){
       $(this).addClass('disabled');
+      tempSpeed=customSpeed;
+      customSpeed=200;
+setTimeout(function() {
+  customSpeed = tempSpeed;
+}, 3000);
+$(this).prop('disabled', true);
   });
+
+  $("#Sniper").click(function(){
+    $(this).addClass('disabled');
+    pieces = 'A'
+setTimeout(function() {
+  pieces = 'IOTLJZS'
+}, 10000);
+$(this).prop('disabled', true);
 });
+
+$("#Atomic").click(function(){
+  $(this).addClass('disabled');
+  backgroundGrid[39].fill(9);
+  backgroundGrid[38].fill(9);
+  backgroundGrid[37].fill(9);
+  backgroundGrid[36].fill(9);
+  backgroundGrid[35].fill(9);
+  backgroundGrid[34].fill(9);
+  backgroundGrid[33].fill(9);
+  backgroundGrid[32].fill(9);
+  backgroundGrid[31].fill(9);
+  backgroundGrid[30].fill(9);
+$(this).prop('disabled', true);
+});
+
+$("#Blind").click(function(){
+  $(this).addClass('disabled');
+  blind=true;
+  setTimeout(function() {
+    blind=false;
+  }, 10000);
+$(this).prop('disabled', true);
+});
+
+$("#Polymorph").click(function(){
+  $(this).addClass('disabled');
+  pieces = 'VWXY'
+setTimeout(function() {
+pieces = 'IOTLJZS'
+}, 10000);
+$(this).prop('disabled', true);
+});
+
+$("#noGhost").click(function(){
+  $(this).addClass('disabled');
+  var colorTemp=colorsGhost;
+  var borderTemp=borderColorGhost;
+
+  colorsGhost = [
+    null,
+    'rgb(0,255,255,0)',
+    'rgb(251,255,0,0)',
+    'rgb(190,0,255,0)',
+    'rgb(255,164,0,0)',
+    'rgb(55,0,255,0)',
+    'rgb(255,0,0,0)',
+    'rgb(0,255,0,0)',
+    'rgb(0,0,0,0)',
+    'rgb(255,215,0,0)',
+  ];
+  
+  borderColorGhost = 'rgb(0,0,0,0)'
+
+  setTimeout(function() {
+    colorsGhost=colorTemp;
+    borderColorGhost=borderTemp;
+  }, 5000);
+$(this).prop('disabled', true);
+});
+});
+
+
