@@ -4,14 +4,8 @@ body {
   height: 100%;
 }
 
-/* @font-face {
-  font-family: "My Custom Font";
-  src: url(./../font/tetris.ttf) format("truetype");
-} */
-
-
 body {
-  background: url('./../images/templatebackgroundbis.jpeg') no-repeat center center fixed;
+  background: url('./../images/background.jpeg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -20,7 +14,6 @@ body {
 
 h1 {
   text-align: center;
-  /* font-family: "My Custom Font"; */
   font-family: fantasy;
   font-size:78px;
 }
@@ -81,14 +74,7 @@ h3 {
 .bonus {
   display: flex;
   flex-direction: column;
-  /* justify-content: space-around; */
 }
-
-/* .malus{
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-} */
 
 .boutton {
   margin: 7px 50px;

@@ -214,13 +214,13 @@ function resultCustom(score) {
   result=[0,0];
   if (score < 100) {
     result[0] = "Come on kid, you can do better!";
-    result[1]='images/Level1.png'
+    result[1]='images/level1.png'
   } else if (score < 1000) {
     result[0] = "Well done knight , you are on the right path!";
-    result[1]='images/Level2.png'
+    result[1]='images/level2.png'
   } else {
     result[0] = "Look at you, you are a king!";
-    result[1]='images/Level3.png'
+    result[1]='images/level3.png'
   } 
   return result
 }
@@ -256,6 +256,7 @@ function playerReset() {
   player.position.x = math.floor(backgroundGrid[0].length / 2) - math.floor(player.tetromino[0].length / 2);
   player.tetrominoDropped++
   if (collision(backgroundGrid, player)) {
+    document.getElementById('GameOverMusic').play();
     swal({
       title: resultCustom(player.score)[0],
       imageUrl: resultCustom(player.score)[1],
@@ -271,7 +272,6 @@ function playerReset() {
    start = new Date().getTime();
    chronometer();
 resetButtons();
-document.getElementById('GameOverMusic').play();
   }
 
 }
@@ -515,10 +515,10 @@ $(document).ready(function(){
   $("#CoolDown").click(function(){
       $(this).addClass('disabled');
       tempSpeed=customSpeed;
-      customSpeed=200;
+      customSpeed=2000;
 setTimeout(function() {
   customSpeed = tempSpeed;
-}, 3000);
+}, 10000);
 $(this).prop('disabled', true);
 document.getElementById('CoolDownMusic').play();
   });
@@ -526,6 +526,7 @@ document.getElementById('CoolDownMusic').play();
   $("#Sniper").click(function(){
     $(this).addClass('disabled');
     pieces = 'A'
+    nextTetromino = createPiece('A');
 setTimeout(function() {
   pieces = 'IOTLJZS'
 }, 10000);
