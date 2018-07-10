@@ -210,16 +210,18 @@ var borderColorGhost = 'rgb(0,0,0,0.35)'
 var pieces = 'IOTLJZS';
 var nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())])
 
-function titleCustom(score) {
-  if (score < 20) {
-    result = "Come on kid, you can do better!";
-  } else if (score < 100) {
-    result = "Well done, you are on the right path!";
-  } else if (score < 200) {
-    result = "Look at you Wizard master";
-  } else if (score < 400) {
-    result = "You are not human!";
-  }
+function resultCustom(score) {
+  result=[0,0];
+  if (score < 100) {
+    result[0] = "Come on kid, you can do better!";
+    result[1]='images/Level1.png'
+  } else if (score < 1000) {
+    result[0] = "Well done knight , you are on the right path!";
+    result[1]='images/Level2.png'
+  } else {
+    result[0] = "Look at you, you are a king!";
+    result[1]='images/Level3.png'
+  } 
   return result
 }
 
@@ -255,9 +257,8 @@ function playerReset() {
   player.tetrominoDropped++
   if (collision(backgroundGrid, player)) {
     swal({
-      title: titleCustom(player.score),
-      // text: 'Modal with a custom image.',
-      imageUrl: 'images/templatebackground.png',
+      title: resultCustom(player.score)[0],
+      imageUrl: resultCustom(player.score)[1],
       imageWidth: 400,
       imageHeight: 200,
       imageAlt: 'Custom image',
@@ -270,6 +271,7 @@ function playerReset() {
    start = new Date().getTime();
    chronometer();
 resetButtons();
+document.getElementById('GameOverMusic').play();
   }
 
 }
@@ -481,14 +483,14 @@ window.onload = function () {
         swal({
           title: 'Mouse',
           text: 'Click on the bonus buttons but choose your timing wisely!',
-          imageUrl: 'images/keyboard.png',
+          imageUrl: 'images/bonus.png',
           imageWidth: 706,
           imageHeight: 305,
           animation: false
         }).then(()=>{
           swal({
-            title: "Enough talking, show me what you got!",
-            // text: "Game starts in 3 seconds.",
+            title: "Enough talking, ready!?",
+            imageWidth: 400,
             timer: 3000,
             showConfirmButton: false
           })})
@@ -501,15 +503,12 @@ window.onload = function () {
 
 
 var vid = document.getElementById("BackgroundMusic");
-vid.volume = 0.07;
+vid.volume = 0.03;
 updateScore();
 playerReset();
 draw();
 setTimeout(update,1000)
 chronometer();
-
-var timeoutId = 
-
 
 
 $(document).ready(function(){
@@ -521,6 +520,7 @@ setTimeout(function() {
   customSpeed = tempSpeed;
 }, 3000);
 $(this).prop('disabled', true);
+document.getElementById('CoolDownMusic').play();
   });
 
   $("#Sniper").click(function(){
@@ -530,6 +530,7 @@ setTimeout(function() {
   pieces = 'IOTLJZS'
 }, 10000);
 $(this).prop('disabled', true);
+document.getElementById('SniperMusic').play();
 });
 
 $("#Atomic").click(function(){
@@ -545,6 +546,7 @@ $("#Atomic").click(function(){
   backgroundGrid[31].fill(9);
   backgroundGrid[30].fill(9);
 $(this).prop('disabled', true);
+document.getElementById('BombMusic').play();
 });
 
 $("#Blind").click(function(){
@@ -592,5 +594,4 @@ $("#noGhost").click(function(){
 $(this).prop('disabled', true);
 });
 });
-
 
