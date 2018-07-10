@@ -214,13 +214,13 @@ function resultCustom(score) {
   result=[0,0];
   if (score < 100) {
     result[0] = "Come on kid, you can do better!";
-    result[1]='images/level1.png'
+    result[1]='images/Level1.png'
   } else if (score < 1000) {
     result[0] = "Well done knight , you are on the right path!";
-    result[1]='images/level2.png'
+    result[1]='images/Level2.png'
   } else {
     result[0] = "Look at you, you are a king!";
-    result[1]='images/level3.png'
+    result[1]='images/Level3.png'
   } 
   return result
 }
