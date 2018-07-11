@@ -10,13 +10,14 @@ var ctxNext = canvasNext.getContext('2d');
 var width = canvas.width;
 var height = canvas.height;
 var ratio = height / width;
-var scaleFactor = 20;
-var scaleFactorNext = 20;
+var scaleFactor = 20;//if you put 40 there, you will have a "real" tetris 10*20 dimensions
+var scaleFactorNext = 20;//40, same comment
 ctx.scale(scaleFactor, scaleFactor);
 ctxNext.scale(scaleFactorNext, scaleFactorNext);
 var numberColumns = width / scaleFactor;
 var backgroundGrid = createMatrix(numberColumns, numberColumns * ratio);
 
+//Player object that will be used to track tetromino position, scores etc.
 var player = {
   position: {
     x: math.floor(backgroundGrid[0].length / 2) - 1,
@@ -29,7 +30,6 @@ var player = {
  level:1,
  speed:1000,
 }
-
 
 
 //Function used to define the grid game
@@ -76,6 +76,7 @@ function playerMove(offset) {
   }
 }
 
+//Check if a line is full and needs to be removed and the grid shifted
 function linecomplete() {
   let rowCount = 1;
   outer: for (let y = backgroundGrid.length - 1; y > 0; --y) {
@@ -84,18 +85,18 @@ function linecomplete() {
         continue outer;
       }
     }
-
     const row = backgroundGrid.splice(y, 1)[0].fill(0);
     backgroundGrid.unshift(row);
     ++y;
     document.getElementById('LineSound').play();
     player.score += rowCount * 10;
-    rowCount *= 2;
+    rowCount *= 2; //To give bonus score to multiple lines completion
     player.linesNumber++
   }
 
 }
 
+//Tetromino declaration
 function createPiece(type) {
   if (type === 'I') {
     return [
@@ -207,15 +208,18 @@ var colorsGhost = [
 var borderColor = 'rgb(0,0,0)'
 var borderColorGhost = 'rgb(0,0,0,0.35)'
 
+// Create the pool of tetromino to be chosen from randomly
 var pieces = 'IOTLJZS';
 var nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())])
 
+
+//User Game Over custom display function based on score
 function resultCustom(score) {
   result=[0,0];
   if (score < 100) {
     result[0] = "Come on kid, you can do better!";
     result[1]='images/Level1.png'
-  } else if (score < 1000) {
+  } else if (score < 400) {
     result[0] = "Well done knight , you are on the right path!";
     result[1]='images/Level2.png'
   } else {
@@ -246,15 +250,14 @@ function resetButtons() {
 
 }
 
-
-
-
+//Important function to reposition tetromino at the center top after a collision
 function playerReset() {
   player.tetromino = nextTetromino;
   nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())]);
   player.position.y = 0;
   player.position.x = math.floor(backgroundGrid[0].length / 2) - math.floor(player.tetromino[0].length / 2);
   player.tetrominoDropped++
+  //GameOver when the tetromino is put back on top and there is a collision directly
   if (collision(backgroundGrid, player)) {
     document.getElementById('GameOverMusic').play();
     swal({
@@ -277,7 +280,7 @@ resetButtons();
 }
 
 
-
+//Giving the visual result of the background grid and the tetrominos
 function draw() {
   ctx.fillStyle = 'white';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -292,8 +295,8 @@ function draw() {
   drawTetromino(ctx, player.tetromino, player.position, false);
 }
 
+// Visual result for the upcoming tetrominos
 var blind=false;
-
 function drawNext() {
   ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
   if (!blind){
@@ -316,6 +319,7 @@ function ghost(backgroundGrid, player) {
   return count - 1
 }
 
+// Draw function going through the non zero values of the tetrominos matrices
 function drawTetromino(context, matrix, offset, isGhost) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
@@ -327,7 +331,6 @@ function drawTetromino(context, matrix, offset, isGhost) {
           context.fillStyle = colors[value];
           context.strokeStyle = borderColor;
         }
-
         context.fillRect(x + offset.x, y + offset.y, 1, 1);
         context.beginPath();
         context.lineWidth = "0.1";
@@ -345,9 +348,7 @@ function updateScore() {
   $('#level').text(player.level)
 }
 
-
-
-
+// Clockwise and anti-clockwise rotation using transpose from math.js
 function rotation(dir, matrix) {
   if (dir == 1) {
     var matrixRotated = math.transpose(matrix).map(function (e) {
@@ -363,7 +364,7 @@ function rotation(dir, matrix) {
 }
 
 
-
+//To apply gravity on tetrominos
 function playerDrop() {
   player.position.y++;
   if (collision(backgroundGrid, player)) {
@@ -377,14 +378,17 @@ function playerDrop() {
 
 }
 
-var customSpeed=1000;
+//To be adjusted
+var customSpeed=500;
+
+
 
 function update() {
   player.speed=customSpeed;
   draw();
   drawNext();
   playerDrop();
-  player.level=math.floor(elapsed/1000/30);
+  player.level=math.floor(elapsed/1000/20);
   player.speed=Math.max(100,player.speed-player.level*50);
   updateScore();
   setTimeout(update,player.speed)
@@ -503,7 +507,7 @@ window.onload = function () {
 
 
 var vid = document.getElementById("BackgroundMusic");
-vid.volume = 0.03;
+vid.volume = 0.03; //otherwise music too loud, can't here the other sounds effects
 updateScore();
 playerReset();
 draw();
@@ -548,6 +552,8 @@ $("#Atomic").click(function(){
   backgroundGrid[30].fill(9);
 $(this).prop('disabled', true);
 document.getElementById('BombMusic').play();
+tempScore=player.score;
+player.score=tempScore-10230;
 });
 
 $("#Blind").click(function(){
