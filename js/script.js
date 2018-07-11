@@ -208,7 +208,7 @@ var colorsGhost = [
 var borderColor = 'rgb(0,0,0)'
 var borderColorGhost = 'rgb(0,0,0,0.35)'
 
-// Create the pool of tetromino to be chosen from randomly
+// Create the pool of tetrominos to be chosen from randomly
 var pieces = 'IOTLJZS';
 var nextTetromino = createPiece(pieces[math.floor(pieces.length * Math.random())])
 
